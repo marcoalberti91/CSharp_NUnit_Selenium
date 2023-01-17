@@ -17,22 +17,23 @@ using CS_NUnit.Xpath;
 using CS_NUnit.Values;
 using CS_NUnit.Functions;
 using Renci.SshNet;
-using System.Text.RegularExpressions;
+using OpenQA.Selenium.Appium.Interfaces;
+using OpenQA.Selenium.Appium.MultiTouch;
 
 namespace CS_NUnit
 {
-    public class SeleniumTraining : BaseClass_ToolsQA
+    public class AppiumTraining : BaseClass_Appium
     {
-        public void SeleniumTest(Xpath__Login Xpath, Values__Login Value)
+        public void AppiumTest(Xpath__Mobile Xpath, Values__Mobile Value)
         {
+            // Server has to be initialized inside test script to prevent app restarting multiple times
+            //AndroidDriver appiumDriver = new AndroidDriver();
+            //appiumDriver.InitializeAppium();
+
             try
             {
-                // Verify presence of Logo in Home page
-                AssertElementExists(Xpath.HomePageLogo);
-
-                // Click on SELENIUM TRAINING box
-                FindElementAndClick(Xpath.SeleniumTraining, Value.SeleniumTraining, 10);
-
+                // Verify the Home page is opened and the title on the top is visible
+                AssertElementExists(Xpath.HomePage);
             }
 
             catch (Exception e)
@@ -42,4 +43,3 @@ namespace CS_NUnit
         }
     }
 }
-

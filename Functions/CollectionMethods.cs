@@ -11,6 +11,11 @@ using System.IO.Compression;
 using System.Net;
 using System.Net.Sockets;
 using Renci.SshNet;
+using OpenQA.Selenium.Appium;
+using OpenQA.Selenium.Appium.Android;
+using OpenQA.Selenium.Appium.Enums;
+using OpenQA.Selenium.Appium.MultiTouch;
+using OpenQA.Selenium.Appium.Interfaces;
 
 namespace CS_NUnit.Functions
 {
@@ -46,6 +51,29 @@ namespace CS_NUnit.Functions
             vars = new Dictionary<string, object>();
         }
 
+        // Method to open the Android session
+        public void OpenAndroid()
+        {
+            AppiumOptions option = new AppiumOptions();
+            option.AddAdditionalCapability(MobileCapabilityType.PlatformName, "Android");
+            option.AddAdditionalCapability(MobileCapabilityType.PlatformVersion, "13.0");
+            option.AddAdditionalCapability(MobileCapabilityType.DeviceName, "R5CR8218TJV");
+            option.AddAdditionalCapability(MobileCapabilityType.AutomationName, "UiAutomator2");
+
+            // Use the command > adb shell dumpsys window | find "mCurrentFocus" < to retrieve AppPackage and AppActivity 
+            option.AddAdditionalCapability(AndroidMobileCapabilityType.AppPackage, "com.calm.android");
+            option.AddAdditionalCapability(AndroidMobileCapabilityType.AppActivity, "com.calm.android.ui.splash.SplashActivity");
+
+            // Use app capability if the app is in a particular location
+            //option.AddAdditionalCapability(MobileCapabilityType.App, @"C:\Users\marco.alberti\Downloads\Calculator_v8.1 (403424005)_apkpure.com.apk");
+
+            // Provide uri of Appium Server
+            driver = new AndroidDriver<AndroidElement>(new Uri("http://127.0.0.1:4723/wd/hub"), option);
+
+            // Same as for Selenium as follow:
+            // driver = new ChromeDriver(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), option);
+        }
+
         // Method to close the ChromeDriver session
         public void CloseDriver()
         {
@@ -62,7 +90,6 @@ namespace CS_NUnit.Functions
             Console.WriteLine("Navigating to: " + url_runsettings);
             driver.Manage().Window.Maximize();
         }
-
 
         // Method to verify if an element exists, identified through the Xpath "XpathVar"
         public void AssertElementExists(String XpathVar)
@@ -221,6 +248,49 @@ namespace CS_NUnit.Functions
             Actions actions = new Actions(driver);
             actions.MoveToElement(element);
             actions.Perform();
+        }
+
+        // Method to swipe mobile screen in choosing direction. Pass in input the direction of the swipe needed
+        public void Swipe(string Direction)
+        {
+            ITouchAction a;
+
+            if (Direction == "Left")
+            {
+                a = new TouchAction((IPerformsTouchActions)driver).Press(1000, 1000).Wait(1000).MoveTo(100, 1000).Release();
+                a.Perform();
+                Console.WriteLine("Swiping mobile screen left");
+            }
+            else if (Direction == "Right")
+            {
+                a = new TouchAction((IPerformsTouchActions)driver).Press(100, 1000).Wait(1000).MoveTo(1000, 1000).Release();
+                a.Perform();
+                Console.WriteLine("Swiping mobile screen right");
+            }
+            else if (Direction == "Up")
+            {
+                a = new TouchAction((IPerformsTouchActions)driver).Press(500, 1500).Wait(1000).MoveTo(500, 500).Release();
+                a.Perform();
+                Console.WriteLine("Swiping mobile screen up");
+            }
+            else if (Direction == "Down")
+            {
+                a = new TouchAction((IPerformsTouchActions)driver).Press(500, 500).Wait(1000).MoveTo(500, 1500).Release();
+                a.Perform();
+                Console.WriteLine("Swiping mobile screen down");
+            }
+            else
+            {
+                Console.WriteLine("Wrong expected direction");
+            }
+        }
+
+        // Method to tap in a specific point, defined by pixels (X,Y). Useful to close Android keyboard
+        public void TapOutside(int PixelX, int PixelY)
+        {
+            ITouchAction a;
+            a = new TouchAction((IPerformsTouchActions)driver).Press(PixelX, PixelY).Wait(200).Release();
+            a.Perform();
         }
 
         // Method to scroll a page horizontally "horPixel" and vertically "verPixel"
