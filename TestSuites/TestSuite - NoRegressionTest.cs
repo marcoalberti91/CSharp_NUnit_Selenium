@@ -16,5 +16,13 @@ namespace CS_NUnit
             [Category("SeleniumTraining")]
             public void AccessSeleniumTrainingTestcase() => AccessSeleniumTraining(Xpath, Value);
         }
+
+        public class IronPythonTrainingTestsuite : IronPythonTraining
+        {
+
+            [Test]
+            [Category("SeleniumTraining")]
+            public void IronPythonTrainingTestcase() => IronPythonTest();
+        }
     }
 }

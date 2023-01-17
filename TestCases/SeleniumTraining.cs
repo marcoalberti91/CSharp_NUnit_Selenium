@@ -17,7 +17,6 @@ using CS_NUnit.Xpath;
 using CS_NUnit.Values;
 using CS_NUnit.Functions;
 using Renci.SshNet;
-using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace CS_NUnit
@@ -33,6 +32,7 @@ namespace CS_NUnit
 
                 // Click on SELENIUM TRAINING box
                 FindElementAndClick(Xpath.SeleniumTraining, Value.SeleniumTraining, 10);
+
             }
 
             catch (Exception e)
